@@ -1,0 +1,18 @@
+# Built files
+.gradle/
+.kotlin/
+build/
+**/build/
+local.properties
+*.iml
+.idea/
+.cxx/
+captures/
+*.apk.idsig
+
+# Web leftovers
+node_modules/
+dist/
+
+# OS
+.DS_Store
