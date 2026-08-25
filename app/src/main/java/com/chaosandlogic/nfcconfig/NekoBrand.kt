@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -19,6 +18,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlin.math.PI
@@ -52,73 +52,74 @@ fun NekoWordmark(
     color: Color = NekoColors.Ink,
     height: Dp = 44.dp,
 ) {
-    Canvas(modifier.size(width = height * 4.6f, height = height)) {
-        val stroke = Stroke(width = size.height * 0.11f, cap = StrokeCap.Round)
-        val top = size.height * 0.16f
-        val bot = size.height * 0.84f
+    Canvas(modifier.size(width = height * 4.35f, height = height)) {
+        val stroke = Stroke(width = size.height * 0.105f, cap = StrokeCap.Round)
+        val top = size.height * 0.18f
+        val bot = size.height * 0.82f
         val mid = size.height * 0.50f
-        val unit = size.width / 4.15f
+        val unit = size.width / 4f
+        val nShift = size.height * 0.05f
 
-        fun letterOrigin(index: Int): Float = unit * index + unit * 0.06f * index
-
-        val n0 = letterOrigin(0)
-        val nShift = size.height * 0.04f
-        drawLine(color, Offset(n0 + unit * 0.08f, top), Offset(n0 + unit * 0.08f, bot), stroke.width, StrokeCap.Round)
+        // N — disconnected stems + diagonal, right stem sitting slightly ahead.
+        val n0 = 0f
+        drawLine(color, Offset(n0 + unit * 0.10f, top), Offset(n0 + unit * 0.10f, bot), stroke.width, StrokeCap.Round)
         drawLine(
             color,
-            Offset(n0 + unit * 0.18f, top + nShift),
-            Offset(n0 + unit * 0.78f, bot - nShift),
+            Offset(n0 + unit * 0.22f, top + nShift),
+            Offset(n0 + unit * 0.78f, bot),
             stroke.width,
             StrokeCap.Round,
         )
         drawLine(
             color,
-            Offset(n0 + unit * 0.88f, top - nShift),
-            Offset(n0 + unit * 0.88f, bot - nShift * 2f),
+            Offset(n0 + unit * 0.86f, top - nShift),
+            Offset(n0 + unit * 0.86f, bot - nShift),
             stroke.width,
             StrokeCap.Round,
         )
 
-        val e0 = letterOrigin(1)
-        drawLine(color, Offset(e0 + unit * 0.10f, top), Offset(e0 + unit * 0.86f, top), stroke.width, StrokeCap.Round)
-        drawLine(color, Offset(e0 + unit * 0.10f, mid), Offset(e0 + unit * 0.64f, mid), stroke.width, StrokeCap.Round)
-        drawLine(color, Offset(e0 + unit * 0.10f, bot), Offset(e0 + unit * 0.86f, bot), stroke.width, StrokeCap.Round)
+        // E — three bars, no spine; middle bar shorter.
+        val e0 = unit * 0.98f
+        drawLine(color, Offset(e0 + unit * 0.08f, top), Offset(e0 + unit * 0.82f, top), stroke.width, StrokeCap.Round)
+        drawLine(color, Offset(e0 + unit * 0.08f, mid), Offset(e0 + unit * 0.58f, mid), stroke.width, StrokeCap.Round)
+        drawLine(color, Offset(e0 + unit * 0.08f, bot), Offset(e0 + unit * 0.82f, bot), stroke.width, StrokeCap.Round)
 
-        val k0 = letterOrigin(2)
+        // K — stem plus a detached chevron, kept close enough to read as K.
+        val k0 = unit * 1.92f
         drawLine(color, Offset(k0 + unit * 0.10f, top), Offset(k0 + unit * 0.10f, bot), stroke.width, StrokeCap.Round)
         drawLine(
             color,
-            Offset(k0 + unit * 0.38f, top),
-            Offset(k0 + unit * 0.86f, mid - size.height * 0.04f),
+            Offset(k0 + unit * 0.32f, top),
+            Offset(k0 + unit * 0.78f, mid - size.height * 0.03f),
             stroke.width,
             StrokeCap.Round,
         )
         drawLine(
             color,
-            Offset(k0 + unit * 0.42f, bot),
-            Offset(k0 + unit * 0.90f, mid + size.height * 0.04f),
+            Offset(k0 + unit * 0.32f, bot),
+            Offset(k0 + unit * 0.78f, mid + size.height * 0.03f),
             stroke.width,
             StrokeCap.Round,
         )
 
-        val o0 = letterOrigin(3)
-        val oval = Size(unit * 0.78f, size.height * 0.72f)
-        val oTop = top - size.height * 0.04f
+        // O — two offset open arcs: the dynamic “ahead” logotype.
+        val o0 = unit * 2.88f
+        val oval = Size(unit * 0.72f, size.height * 0.70f)
         drawArc(
             color = color,
-            startAngle = 28f,
-            sweepAngle = 250f,
+            startAngle = 38f,
+            sweepAngle = 284f,
             useCenter = false,
-            topLeft = Offset(o0 + unit * 0.04f, oTop),
+            topLeft = Offset(o0 + unit * 0.02f, top - size.height * 0.04f),
             size = oval,
             style = stroke,
         )
         drawArc(
             color = color,
-            startAngle = 208f,
-            sweepAngle = 250f,
+            startAngle = 218f,
+            sweepAngle = 284f,
             useCenter = false,
-            topLeft = Offset(o0 + unit * 0.22f, oTop + size.height * 0.08f),
+            topLeft = Offset(o0 + unit * 0.22f, top + size.height * 0.04f),
             size = oval,
             style = stroke,
         )
