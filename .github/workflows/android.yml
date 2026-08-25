@@ -20,3 +20,39 @@ jobs:
         with:
           name: nfc-wifi-apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nfc-wifi-apk
+          path: dist
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          apk="NFC_WiFi-${version}.apk"
+          mv dist/app-debug.apk "dist/${apk}"
+          {
+            echo "Installable Android APK for NFC Wi-Fi."
+            echo
+            echo "## Install"
+            echo "1. Download ${apk} below."
+            echo "2. Allow installing from that source if Android asks."
+            echo "3. Open **NFC Wi-Fi**, turn NFC on, enter the network name and password."
+            echo "4. Tap **Write NFC tag** and hold the phone to an NDEF sticker."
+            echo
+            echo "This is a debug build for sideloading, not a Play Store release. The password is not stored on the phone."
+          } > /tmp/release-notes.md
+          gh release create "$GITHUB_REF_NAME" \
+            "dist/${apk}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "NFC Wi-Fi v${version}" \
+            --notes-file /tmp/release-notes.md
