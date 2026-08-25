@@ -6,9 +6,11 @@ iPhone cannot write these tags from a third-party app in a useful way, so this p
 
 ## Install on the phone
 
-1. On the Android phone, open this GitHub repo (or the Actions run) and download `app-debug.apk`.
+1. Download the APK from the latest [GitHub Release](https://github.com/ChaosandLogic/NFC_config/releases).
 2. Allow installing from that source if Android asks.
 3. Open **NFC Wi-Fi**, turn NFC on, enter the SSID and password, tap **Write NFC tag**, and hold the phone to an NDEF sticker.
+
+CI also uploads `app-debug.apk` on every push if you need a build that is not tagged yet.
 
 After that, another phone can tap the tag to join the network.
 
