@@ -18,5 +18,5 @@ jobs:
       - run: ./gradlew --no-daemon test assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: nfc-wifi-apk
+          name: neko-nfc-apk
           path: app/build/outputs/apk/debug/app-debug.apk

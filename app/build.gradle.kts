@@ -9,7 +9,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.chaosandlogic.nfcconfig"
+        applicationId = "se.nekohealth.nfcconfig"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

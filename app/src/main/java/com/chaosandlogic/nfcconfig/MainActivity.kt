@@ -19,8 +19,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -37,9 +37,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NfcWifiApp(
+            NekoNfcApp(
                 initialSsid = prefs.getString(KEY_SSID, "").orEmpty(),
                 writing = writing,
                 status = status,
@@ -158,18 +158,8 @@ sealed class Status {
     data class Error(val message: String) : Status()
 }
 
-private val Cream = Color(0xFFEFE8DC)
-private val Card = Color(0xFFFBF7F0)
-private val Ink = Color(0xFF1B1814)
-private val Muted = Color(0xFF6E675C)
-private val Line = Color(0xFFD8CEC0)
-private val Accent = Color(0xFFB54712)
-private val AccentHover = Color(0xFF93390D)
-private val OkGreen = Color(0xFF2F6A45)
-private val Danger = Color(0xFF9B2C2C)
-
 @Composable
-private fun NfcWifiApp(
+private fun NekoNfcApp(
     initialSsid: String,
     writing: Boolean,
     status: Status,
@@ -183,38 +173,55 @@ private fun NfcWifiApp(
     var password by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var formError by rememberSaveable { mutableStateOf("") }
+    val cardShape = RoundedCornerShape(8.dp)
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Cream,
+        color = NekoColors.Oatmeal,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 48.dp),
+                .padding(horizontal = 24.dp, vertical = 40.dp),
         ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                NekoMonogram(size = 22.dp)
+                Spacer(Modifier.size(10.dp))
+                Text(
+                    text = "NEKO HEALTH AB",
+                    color = NekoColors.Terracotta,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 2.4.sp,
+                    fontFamily = FontFamily.SansSerif,
+                )
+            }
+            Spacer(Modifier.height(18.dp))
+            NekoBrandHeader()
+            Spacer(Modifier.height(10.dp))
             Text(
-                text = "NFC CONFIG",
-                color = Accent,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 2.sp,
+                text = "Ahead of Your Health",
+                color = NekoColors.Stone,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                letterSpacing = 0.4.sp,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(18.dp))
             Text(
                 text = "Wi-Fi on a tap.",
-                color = Ink,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = FontFamily.Serif,
-                lineHeight = 40.sp,
+                color = NekoColors.Ink,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Light,
+                fontFamily = FontFamily.SansSerif,
+                lineHeight = 36.sp,
+                letterSpacing = (-0.4).sp,
             )
             Spacer(Modifier.height(10.dp))
             Text(
-                text = "Enter the network name and password, then write them to a tag.",
-                color = Muted,
+                text = "Write a clinic or guest network onto an NFC tag so a phone can join with one tap.",
+                color = NekoColors.Stone,
                 fontSize = 16.sp,
                 lineHeight = 24.sp,
             )
@@ -223,10 +230,10 @@ private fun NfcWifiApp(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(22.dp))
-                    .background(Card)
-                    .border(1.dp, Line, RoundedCornerShape(22.dp))
-                    .padding(18.dp),
+                    .clip(cardShape)
+                    .background(NekoColors.Porcelain)
+                    .border(1.dp, NekoColors.Line, cardShape)
+                    .padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 FieldLabel("Network name")
@@ -235,12 +242,12 @@ private fun NfcWifiApp(
                     onValueChange = { ssid = it },
                     placeholder = "SSID",
                     enabled = !writing,
-                    capitalization = KeyboardCapitalization.None,
                 )
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     FieldLabel("Password")
                     TextButton(
@@ -248,10 +255,11 @@ private fun NfcWifiApp(
                         enabled = !writing,
                     ) {
                         Text(
-                            text = if (showPassword) "Hide" else "Show",
-                            color = Accent,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            text = if (showPassword) "HIDE" else "SHOW",
+                            color = NekoColors.Terracotta,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            letterSpacing = 1.4.sp,
                         )
                     }
                 }
@@ -269,7 +277,7 @@ private fun NfcWifiApp(
                         !nfcEnabled -> "NFC is off. Turn it on to write a tag."
                         else -> "Use an NDEF tag. Hold the phone still until it writes."
                     },
-                    color = Muted,
+                    color = NekoColors.Stone,
                     fontSize = 14.sp,
                     lineHeight = 20.sp,
                 )
@@ -286,18 +294,18 @@ private fun NfcWifiApp(
                     },
                     enabled = !writing,
                     modifier = Modifier.fillMaxWidth().height(52.dp),
-                    shape = CircleShape,
+                    shape = RoundedCornerShape(6.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Accent,
-                        contentColor = Color(0xFFFFF7EF),
-                        disabledContainerColor = Accent.copy(alpha = 0.45f),
-                        disabledContentColor = Color(0xFFFFF7EF),
+                        containerColor = NekoColors.Ink,
+                        contentColor = NekoColors.OnAccent,
+                        disabledContainerColor = NekoColors.Ink.copy(alpha = 0.40f),
+                        disabledContentColor = NekoColors.OnAccent,
                     ),
                 ) {
                     Text(
                         text = if (writing) "Waiting for tag…" else "Write NFC tag",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Medium,
                     )
                 }
 
@@ -305,8 +313,8 @@ private fun NfcWifiApp(
                     OutlinedButton(
                         onClick = onCancel,
                         modifier = Modifier.fillMaxWidth().height(52.dp),
-                        shape = CircleShape,
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Ink),
+                        shape = RoundedCornerShape(6.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = NekoColors.Ink),
                     ) {
                         Text("Cancel")
                     }
@@ -316,8 +324,8 @@ private fun NfcWifiApp(
                     OutlinedButton(
                         onClick = onOpenNfcSettings,
                         modifier = Modifier.fillMaxWidth().height(52.dp),
-                        shape = CircleShape,
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Ink),
+                        shape = RoundedCornerShape(6.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = NekoColors.Ink),
                     ) {
                         Text("Open NFC settings")
                     }
@@ -332,10 +340,10 @@ private fun NfcWifiApp(
                     }
                 }
                 val messageColor = when {
-                    formError.isNotEmpty() -> Danger
-                    status is Status.Error -> Danger
-                    status is Status.Ok -> OkGreen
-                    else -> Ink
+                    formError.isNotEmpty() -> NekoColors.Danger
+                    status is Status.Error -> NekoColors.Danger
+                    status is Status.Ok -> NekoColors.Teal
+                    else -> NekoColors.Ink
                 }
                 Text(
                     text = message,
@@ -344,6 +352,14 @@ private fun NfcWifiApp(
                     minLines = 1,
                 )
             }
+
+            Spacer(Modifier.height(24.dp))
+            Text(
+                text = "Neko Health AB  ·  Stockholm",
+                color = NekoColors.Stone,
+                fontSize = 12.sp,
+                letterSpacing = 0.8.sp,
+            )
         }
     }
 }
@@ -351,10 +367,11 @@ private fun NfcWifiApp(
 @Composable
 private fun FieldLabel(text: String) {
     Text(
-        text = text,
-        color = Muted,
-        fontSize = 13.sp,
-        fontWeight = FontWeight.SemiBold,
+        text = text.uppercase(),
+        color = NekoColors.Stone,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Medium,
+        letterSpacing = 1.6.sp,
     )
 }
 
@@ -373,23 +390,23 @@ private fun CredentialField(
         modifier = Modifier.fillMaxWidth(),
         enabled = enabled,
         singleLine = true,
-        placeholder = { Text(placeholder, color = Color(0xFFB0A89C)) },
+        placeholder = { Text(placeholder, color = NekoColors.Placeholder) },
         visualTransformation = if (password) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None
         },
         keyboardOptions = KeyboardOptions(capitalization = capitalization),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(6.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            disabledContainerColor = Color.White,
-            focusedBorderColor = Ink,
-            unfocusedBorderColor = Line,
-            focusedTextColor = Ink,
-            unfocusedTextColor = Ink,
-            cursorColor = Ink,
+            focusedContainerColor = NekoColors.Porcelain,
+            unfocusedContainerColor = NekoColors.Porcelain,
+            disabledContainerColor = NekoColors.Porcelain,
+            focusedBorderColor = NekoColors.Ink,
+            unfocusedBorderColor = NekoColors.Line,
+            focusedTextColor = NekoColors.Ink,
+            unfocusedTextColor = NekoColors.Ink,
+            cursorColor = NekoColors.Ink,
         ),
     )
 }

@@ -1,6 +1,10 @@
-# NFC Wi-Fi
+# Neko NFC
 
-An **Android app** that writes a Wi-Fi **network name** and **password** to an NFC tag. Install it on the phone. No computer or web server is required.
+Client-branded Android app for **Neko Health AB**. It writes a Wi-Fi network name and password to an NFC tag so a phone can join the clinic or guest network with one tap.
+
+Visual identity follows Bedow’s Neko Health guidelines: the shifted geometric wordmark, scan-dot cloud, oatmeal clinic surfaces, and warm terracotta / citrus / sage accents. Tagline: **Ahead of Your Health**.
+
+Brand reference: [Bedow — Neko Health](https://www.bedow.se/work/neko-health/)
 
 iPhone cannot write these tags from a third-party app in a useful way, so this project is Android-only.
 
@@ -8,7 +12,7 @@ iPhone cannot write these tags from a third-party app in a useful way, so this p
 
 1. On the Android phone, open this GitHub repo (or the Actions run) and download `app-debug.apk`.
 2. Allow installing from that source if Android asks.
-3. Open **NFC Wi-Fi**, turn NFC on, enter the SSID and password, tap **Write NFC tag**, and hold the phone to an NDEF sticker.
+3. Open **Neko NFC**, turn NFC on, enter the SSID and password, tap **Write NFC tag**, and hold the phone to an NDEF sticker.
 
 After that, another phone can tap the tag to join the network.
 
@@ -22,6 +26,8 @@ echo "sdk.dir=$ANDROID_HOME" > local.properties
 ```
 
 The APK is `app/build/outputs/apk/debug/app-debug.apk`.
+
+This fork uses application id `se.nekohealth.nfcconfig`, so it can sit next to the unbranded NFC Wi-Fi app.
 
 ## What gets written
 

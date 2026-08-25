@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NFC_config"
+rootProject.name = "NekoNFC"
 include(":app")
