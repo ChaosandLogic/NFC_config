@@ -1,6 +1,7 @@
 package com.chaosandlogic.nfcconfig
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,14 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,9 +25,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Tokens sampled from Bedow's Neko Health identity:
- * oatmeal clinic surfaces, terracotta/citrus optimism, sage/teal calm,
- * and the shifted geometric wordmark plus scan-dot cloud.
+ * Tokens sampled from Bedow's Neko Health identity.
+ * Wordmark and mark are Neko's published PNG assets (press logo + site icon).
  */
 object NekoColors {
     val Oatmeal = Color(0xFFF3EFE4)
@@ -49,117 +47,29 @@ object NekoColors {
 @Composable
 fun NekoWordmark(
     modifier: Modifier = Modifier,
-    color: Color = NekoColors.Ink,
-    height: Dp = 44.dp,
+    height: Dp = 40.dp,
 ) {
-    Canvas(modifier.size(width = height * 4.35f, height = height)) {
-        val stroke = Stroke(width = size.height * 0.105f, cap = StrokeCap.Round)
-        val top = size.height * 0.18f
-        val bot = size.height * 0.82f
-        val mid = size.height * 0.50f
-        val unit = size.width / 4f
-        val nShift = size.height * 0.05f
-
-        // N — disconnected stems + diagonal, right stem sitting slightly ahead.
-        val n0 = 0f
-        drawLine(color, Offset(n0 + unit * 0.10f, top), Offset(n0 + unit * 0.10f, bot), stroke.width, StrokeCap.Round)
-        drawLine(
-            color,
-            Offset(n0 + unit * 0.22f, top + nShift),
-            Offset(n0 + unit * 0.78f, bot),
-            stroke.width,
-            StrokeCap.Round,
-        )
-        drawLine(
-            color,
-            Offset(n0 + unit * 0.86f, top - nShift),
-            Offset(n0 + unit * 0.86f, bot - nShift),
-            stroke.width,
-            StrokeCap.Round,
-        )
-
-        // E — three bars, no spine; middle bar shorter.
-        val e0 = unit * 0.98f
-        drawLine(color, Offset(e0 + unit * 0.08f, top), Offset(e0 + unit * 0.82f, top), stroke.width, StrokeCap.Round)
-        drawLine(color, Offset(e0 + unit * 0.08f, mid), Offset(e0 + unit * 0.58f, mid), stroke.width, StrokeCap.Round)
-        drawLine(color, Offset(e0 + unit * 0.08f, bot), Offset(e0 + unit * 0.82f, bot), stroke.width, StrokeCap.Round)
-
-        // K — stem plus a detached chevron, kept close enough to read as K.
-        val k0 = unit * 1.92f
-        drawLine(color, Offset(k0 + unit * 0.10f, top), Offset(k0 + unit * 0.10f, bot), stroke.width, StrokeCap.Round)
-        drawLine(
-            color,
-            Offset(k0 + unit * 0.32f, top),
-            Offset(k0 + unit * 0.78f, mid - size.height * 0.03f),
-            stroke.width,
-            StrokeCap.Round,
-        )
-        drawLine(
-            color,
-            Offset(k0 + unit * 0.32f, bot),
-            Offset(k0 + unit * 0.78f, mid + size.height * 0.03f),
-            stroke.width,
-            StrokeCap.Round,
-        )
-
-        // O — two offset open arcs: the dynamic “ahead” logotype.
-        val o0 = unit * 2.88f
-        val oval = Size(unit * 0.72f, size.height * 0.70f)
-        drawArc(
-            color = color,
-            startAngle = 38f,
-            sweepAngle = 284f,
-            useCenter = false,
-            topLeft = Offset(o0 + unit * 0.02f, top - size.height * 0.04f),
-            size = oval,
-            style = stroke,
-        )
-        drawArc(
-            color = color,
-            startAngle = 218f,
-            sweepAngle = 284f,
-            useCenter = false,
-            topLeft = Offset(o0 + unit * 0.22f, top + size.height * 0.04f),
-            size = oval,
-            style = stroke,
-        )
-    }
+    Image(
+        painter = painterResource(R.drawable.neko_wordmark),
+        contentDescription = "Neko",
+        modifier = modifier
+            .height(height)
+            .fillMaxWidth(),
+        contentScale = ContentScale.Fit,
+        alignment = Alignment.CenterStart,
+    )
 }
 
 @Composable
 fun NekoMonogram(
     modifier: Modifier = Modifier,
-    color: Color = NekoColors.Ink,
     size: Dp = 28.dp,
 ) {
-    Canvas(modifier.size(size)) {
-        val stroke = Stroke(width = this.size.minDimension * 0.12f, cap = StrokeCap.Round)
-        val glyph = this.size.minDimension * 0.46f
-        val origin = Offset(this.size.width * 0.08f, this.size.height * 0.10f)
-        drawNekoN(color, stroke, origin, glyph)
-        withTransform({
-            rotate(180f, pivot = center)
-        }) {
-            drawNekoN(color, stroke, origin, glyph)
-        }
-    }
-}
-
-private fun DrawScope.drawNekoN(color: Color, stroke: Stroke, origin: Offset, glyph: Float) {
-    drawLine(color, origin, Offset(origin.x, origin.y + glyph * 1.7f), stroke.width, StrokeCap.Round)
-    drawLine(
-        color,
-        Offset(origin.x + glyph * 0.18f, origin.y),
-        Offset(origin.x + glyph * 0.92f, origin.y + glyph * 1.7f),
-        stroke.width,
-        StrokeCap.Round,
-    )
-    drawLine(
-        color,
-        Offset(origin.x + glyph * 0.96f, origin.y),
-        Offset(origin.x + glyph * 0.96f, origin.y + glyph * 1.7f),
-        stroke.width,
-        StrokeCap.Round,
+    Image(
+        painter = painterResource(R.drawable.neko_mark),
+        contentDescription = null,
+        modifier = modifier.size(size),
+        contentScale = ContentScale.Fit,
     )
 }
 

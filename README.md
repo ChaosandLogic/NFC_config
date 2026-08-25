@@ -2,7 +2,7 @@
 
 Client-branded Android app for **Neko Health AB**. It writes a Wi-Fi network name and password to an NFC tag so a phone can join the clinic or guest network with one tap.
 
-Visual identity follows Bedow’s Neko Health guidelines: the shifted geometric wordmark, scan-dot cloud, oatmeal clinic surfaces, and warm terracotta / citrus / sage accents. Tagline: **Ahead of Your Health**.
+Visual identity follows Bedow’s Neko Health guidelines: oatmeal clinic surfaces, scan-dot cloud, and terracotta / citrus / sage accents. The **NEKO** wordmark and NH mark are Neko’s published PNG assets. Tagline: **Ahead of Your Health**.
 
 Brand reference: [Bedow — Neko Health](https://www.bedow.se/work/neko-health/)
 
