@@ -142,12 +142,14 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val PREFS = "nfc_wifi"
         private const val KEY_SSID = "ssid"
+        // Do not set FLAG_READER_SKIP_NDEF_CHECK. That flag leaves Ndef and
+        // NdefFormatable off the tag tech list, so writes fail even on tags
+        // that NFC Tools can program with the same Wi-Fi NDEF payload.
         private const val READER_FLAGS =
             NfcAdapter.FLAG_READER_NFC_A or
                 NfcAdapter.FLAG_READER_NFC_B or
                 NfcAdapter.FLAG_READER_NFC_F or
-                NfcAdapter.FLAG_READER_NFC_V or
-                NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
+                NfcAdapter.FLAG_READER_NFC_V
     }
 }
 

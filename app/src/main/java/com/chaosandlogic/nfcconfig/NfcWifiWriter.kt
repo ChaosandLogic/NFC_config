@@ -45,6 +45,9 @@ object NfcWifiWriter {
             return
         }
 
-        throw IOException("This tag cannot store NDEF Wi-Fi data.")
+        val techs = tag.techList.joinToString(", ")
+        throw IOException(
+            "This tag cannot store NDEF Wi-Fi data. Detected: $techs",
+        )
     }
 }
